@@ -1,0 +1,69 @@
+{
+  "name": "shiguang-notes",
+  "version": "1.0.0",
+  "description": "拾光笔记 Electron 桌面客户端",
+  "main": "dist-electron/electron/main.js",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "dev": "cross-env ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ concurrently -k \"vite\" \"tsc -p tsconfig.electron.json --watch --preserveWatchOutput\" \"wait-on tcp:5173 dist-electron/electron/main.js && cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.electron.json --noEmit",
+    "build": "tsc -p tsconfig.electron.json && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "npm run build && cross-env ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ playwright test",
+    "package:win": "npm run build && cross-env ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ ELECTRON_BUILDER_BINARIES_MIRROR=https://npmmirror.com/mirrors/electron-builder-binaries/ electron-builder --win nsis --x64",
+    "start": "npm run build && cross-env ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/ electron ."
+  },
+  "build": {
+    "appId": "com.shiguang.notes",
+    "productName": "拾光笔记",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "${productName}-${version}-setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "dependencies": {
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@playwright/test": "latest",
+    "@testing-library/jest-dom": "latest",
+    "@testing-library/react": "latest",
+    "@testing-library/user-event": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "latest",
+    "concurrently": "latest",
+    "cross-env": "latest",
+    "electron": "latest",
+    "electron-builder": "latest",
+    "jsdom": "latest",
+    "typescript": "latest",
+    "vite": "latest",
+    "vitest": "latest",
+    "wait-on": "latest"
+  }
+}
