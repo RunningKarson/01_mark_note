@@ -1,5 +1,7 @@
+import { useRef, useState } from "react";
 import type { Note } from "../../shared/types";
 import { countCharacters, formatDate } from "../../shared/domain";
+import { MarkdownHighlight, MarkdownPreview } from "./MarkdownView";
 
 export type SaveStatus = "saved" | "saving" | "error";
 
@@ -16,7 +18,12 @@ const statusText: Record<SaveStatus, string> = {
   error: "保存失败，请继续编辑后重试"
 };
 
+type EditorMode = "edit" | "preview";
+
 export function Editor({ note, saveStatus, onChange, onDelete }: EditorProps) {
+  const [mode, setMode] = useState<EditorMode>("edit");
+  const highlightRef = useRef<HTMLPreElement>(null);
+
   if (!note) {
     return (
       <section className="editor">
@@ -35,7 +42,27 @@ export function Editor({ note, saveStatus, onChange, onDelete }: EditorProps) {
             <span className="save-dot" />
             <span>{statusText[saveStatus]}</span>
           </span>
-          <button className="delete-note" type="button" onClick={onDelete}>删除笔记</button>
+          <div className="editor-toolbar-actions">
+            <div className="mode-switch" aria-label="编辑器模式">
+              <button
+                className={mode === "edit" ? "active" : ""}
+                type="button"
+                aria-pressed={mode === "edit"}
+                onClick={() => setMode("edit")}
+              >
+                编辑
+              </button>
+              <button
+                className={mode === "preview" ? "active" : ""}
+                type="button"
+                aria-pressed={mode === "preview"}
+                onClick={() => setMode("preview")}
+              >
+                预览
+              </button>
+            </div>
+            <button className="delete-note" type="button" onClick={onDelete}>删除笔记</button>
+          </div>
         </div>
         <input
           className="title-input"
@@ -49,13 +76,28 @@ export function Editor({ note, saveStatus, onChange, onDelete }: EditorProps) {
           <span>最后编辑于 {formatDate(note.updatedAt)}</span>
           <span>{countCharacters(note.content)} 字</span>
         </div>
-        <textarea
-          className="content-input"
-          aria-label="笔记内容"
-          placeholder="从这里开始记录你的想法..."
-          value={note.content}
-          onChange={(event) => onChange({ title: note.title, content: event.target.value })}
-        />
+        {mode === "edit" ? (
+          <div className="markdown-editor-wrap">
+            <pre className="markdown-highlight-layer" aria-hidden="true" ref={highlightRef}>
+              <MarkdownHighlight content={note.content || " "} />
+            </pre>
+            <textarea
+              className="content-input markdown-textarea"
+              aria-label="笔记内容"
+              placeholder="从这里开始记录你的想法..."
+              value={note.content}
+              onScroll={(event) => {
+                if (highlightRef.current) {
+                  highlightRef.current.scrollTop = event.currentTarget.scrollTop;
+                  highlightRef.current.scrollLeft = event.currentTarget.scrollLeft;
+                }
+              }}
+              onChange={(event) => onChange({ title: note.title, content: event.target.value })}
+            />
+          </div>
+        ) : (
+          <MarkdownPreview content={note.content} />
+        )}
       </div>
     </section>
   );

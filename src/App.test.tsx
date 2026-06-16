@@ -89,4 +89,31 @@ describe("App", () => {
     await beforeClose?.();
     expect(window.desktop.confirmClose).toHaveBeenCalled();
   });
+
+  it("switches between markdown edit and preview modes", async () => {
+    const user = userEvent.setup();
+    const markdownState: AppState = {
+      ...initialState,
+      notes: [{
+        id: "markdown",
+        title: "Markdown",
+        content: "# 标题\n\n- **重点**\n\n访问 [官网](https://example.com)",
+        updatedAt: 300
+      }],
+      activeId: "markdown"
+    };
+    vi.mocked(window.desktop.loadAppState).mockResolvedValueOnce(markdownState);
+
+    render(<App />);
+    expect(await screen.findByLabelText("笔记内容")).toHaveValue(markdownState.notes[0].content);
+
+    await user.click(screen.getByRole("button", { name: "预览" }));
+    expect(screen.getByRole("heading", { name: "标题" })).toBeInTheDocument();
+    expect(screen.getByText("重点")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "官网" })).toHaveAttribute("href", "https://example.com");
+    expect(screen.queryByLabelText("笔记内容")).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "编辑" }));
+    expect(screen.getByLabelText("笔记内容")).toHaveValue(markdownState.notes[0].content);
+  });
 });

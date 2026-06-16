@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Shiguang Notes logo</title>
+  <desc id="desc">A warm note page with a folded corner, pen stroke, and small light mark.</desc>
+  <style>
+    :root {
+      --halo: rgba(255, 255, 255, 0.92);
+      --shadow: rgba(59, 45, 32, 0.2);
+      --page: #fffdf8;
+      --page-line: #2f2a24;
+      --fold: #f3dfd2;
+      --accent: #cf6f4f;
+      --accent-deep: #8f452f;
+      --leaf: #6c9577;
+      --ink: #272521;
+      --spark: #d9a449;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --halo: rgba(255, 253, 248, 0.2);
+        --shadow: rgba(0, 0, 0, 0.44);
+        --page: #f7efe4;
+        --page-line: #fff8ee;
+        --fold: #d99a7f;
+        --accent: #df8769;
+        --accent-deep: #ffb295;
+        --leaf: #8cc09b;
+        --ink: #171918;
+        --spark: #ffd27a;
+      }
+    }
+  </style>
+
+  <defs>
+    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="145%">
+      <feDropShadow dx="0" dy="18" stdDeviation="20" flood-color="var(--shadow)"/>
+    </filter>
+    <linearGradient id="cover" x1="130" y1="86" x2="384" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="var(--page)"/>
+      <stop offset="1" stop-color="var(--fold)"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="256" cy="256" r="220" fill="none" stroke="var(--halo)" stroke-width="34"/>
+
+  <g filter="url(#soft-shadow)">
+    <path
+      d="M147 72h151l83 83v277c0 22-18 40-40 40H147c-22 0-40-18-40-40V112c0-22 18-40 40-40Z"
+      fill="url(#cover)"
+      stroke="var(--page-line)"
+      stroke-width="18"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M298 74v71c0 12 10 22 22 22h61"
+      fill="none"
+      stroke="var(--page-line)"
+      stroke-width="18"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </g>
+
+  <path
+    d="M167 183c44-31 102-37 143-11 33 21 45 57 20 82-31 31-95 12-104-23-7-27 25-48 58-33 40 18 38 79-14 111-35 21-80 26-118 12"
+    fill="none"
+    stroke="var(--accent)"
+    stroke-width="25"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M310 327 404 233c13-13 34-13 47 0s13 34 0 47l-94 94-56 18 9-65Z"
+    fill="var(--accent)"
+    stroke="var(--page-line)"
+    stroke-width="16"
+    stroke-linejoin="round"
+  />
+  <path d="m393 244 47 47" fill="none" stroke="var(--accent-deep)" stroke-width="16" stroke-linecap="round"/>
+  <path d="m310 327 47 47-56 18 9-65Z" fill="var(--ink)" opacity="0.95"/>
+
+  <path
+    d="M173 359c38 17 83 16 124-3"
+    fill="none"
+    stroke="var(--leaf)"
+    stroke-width="17"
+    stroke-linecap="round"
+  />
+  <path
+    d="M176 118c10 21 28 39 50 49-22 10-40 28-50 50-10-22-28-40-50-50 22-10 40-28 50-49Z"
+    fill="var(--spark)"
+    stroke="var(--page-line)"
+    stroke-width="10"
+    stroke-linejoin="round"
+  />
+</svg>
