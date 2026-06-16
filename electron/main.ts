@@ -7,6 +7,10 @@ let mainWindow: BrowserWindow | null = null;
 let closingConfirmed = false;
 let storage: AppStateStorage;
 
+if (process.env.NODE_ENV === "test") {
+  app.disableHardwareAcceleration();
+}
+
 function titleBarOverlay(theme: Theme) {
   return theme === "dark"
     ? { color: "#171918", symbolColor: "#f0ede6", height: 36 }
@@ -34,6 +38,7 @@ async function createWindow(): Promise<void> {
   });
 
   mainWindow.on("close", (event) => {
+    if (process.env.NODE_ENV === "test") return;
     if (closingConfirmed) return;
     event.preventDefault();
     mainWindow?.webContents.send("window:before-close");

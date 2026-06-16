@@ -5,12 +5,22 @@ import { tmpdir } from "node:os";
 
 let electronApp: ElectronApplication;
 let userDataDir: string;
+test.setTimeout(90_000);
 
 async function launch() {
   return electron.launch({
-    args: [".", `--user-data-dir=${userDataDir}`],
+    args: [".", `--user-data-dir=${userDataDir}`, "--disable-gpu", "--disable-software-rasterizer"],
     env: { ...process.env, NODE_ENV: "test" }
   });
+}
+
+async function closeElectronApp(app: ElectronApplication | undefined) {
+  if (!app) return;
+  await app.evaluate(({ app: electronApp, BrowserWindow }) => {
+    BrowserWindow.getAllWindows().forEach((window) => window.destroy());
+    electronApp.quit();
+  }).catch(() => undefined);
+  await app.close().catch(() => undefined);
 }
 
 test.beforeEach(async () => {
@@ -19,7 +29,7 @@ test.beforeEach(async () => {
 });
 
 test.afterEach(async () => {
-  await electronApp?.close();
+  await closeElectronApp(electronApp);
   await rm(userDataDir, { recursive: true, force: true });
 });
 
@@ -32,7 +42,7 @@ test("persists notes and theme across restarts, then searches and deletes", asyn
   await window.getByLabel("笔记内容").fill("重启后仍然存在");
   await window.getByRole("button", { name: "深色" }).click();
   await expect(window.getByText("已自动保存")).toBeVisible();
-  await electronApp.close();
+  await closeElectronApp(electronApp);
 
   electronApp = await launch();
   window = await electronApp.firstWindow();

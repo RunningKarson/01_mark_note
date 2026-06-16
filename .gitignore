@@ -1,7 +1,64 @@
+# Dependencies
 node_modules/
+
+# Electron / frontend build outputs
 dist/
 dist-electron/
+out/
+build/
 release/
+release-*/
+win-unpacked/
+**/win-unpacked/
+*.blockmap
+*.asar
+*.asar.unpacked/
+
+# Installer / package artifacts
+*.exe
+*.msi
+*.7z
+*.zip
+*.dmg
+*.deb
+*.rpm
+*.AppImage
+
+# Caches
+.cache/
+.vite/
+.vitest/
+.eslintcache
+.turbo/
+.parcel-cache/
+npm-cache/
+coverage/
 test-results/
 playwright-report/
+
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# TypeScript
+*.tsbuildinfo
